@@ -45,6 +45,10 @@ public class IrcServd {
 				foreach (ChannelInfo i in irc.GetChannelList("*")) {
 					sw.WriteLine(i.Channel + "\t" + i.UserCount + "\t" + i.Topic);
 				}
+			} if (cmd[0] == "Motd") {
+				foreach (string m in irc.Motd) {
+					sw.WriteLine(m);
+				}
 			}
 		}
 	}
