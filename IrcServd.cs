@@ -19,10 +19,9 @@ public class IrcServd {
 		irc.OnRawMessage += new IrcEventHandler(OnRawMessage);
 		irc.SupportNonRfc = true;
 		irc.Connect(args , 6667);
-		irc.Login("lister", "IRC Channel listings");
+		irc.Login("WebServ", "IRC Web Services");
 		irc.Listen();
 	}
-	
 	
 	// Handlers, events, and threads
 	public static void Server() {
@@ -41,6 +40,8 @@ public class IrcServd {
 			sw.AutoFlush = true;
 			
 			string[] cmd = sr.ReadLine().Split(new char[]{' '}, 2);
+			// For silent commands, you should write back even if they don't listen - for telnet users
+			// rewrite into switch too
 			if (cmd[0] == "ChannelList") {
 				foreach (ChannelInfo i in irc.GetChannelList("*")) {
 					sw.WriteLine(i.Channel + "\t" + i.UserCount + "\t" + i.Topic);
@@ -49,13 +50,34 @@ public class IrcServd {
 				foreach (string m in irc.Motd) {
 					sw.WriteLine(m);
 				}
+			} if (cmd[0] == "MotdReload") {
+				// don't use yet
+				// irc.RfcMotd();
+			} if (cmd[0] == "GetUser") {
+				// GUESS WHAT RETURNS NULLREFERENCEEXCEPTION WHEN YOU TRY TO USE THE PROPERTIES OF IT?
+				IrcUser u = irc.GetIrcUser(cmd[1]);
+				// we output in plain text, which web UIs can use verbatim
+				// sw.WriteLine("Nickname: {0}", u.Nick);
+				//sw.WriteLine("Realname: {0}", u.Realname);
+				// sw.WriteLine("Hostmask: {0}@{1}", u.Ident, u.Host);
+				// sw.WriteLine("Away: {0}", u.IsAway);
+				// sw.WriteLine("IRC Operator: {0}", u.IsIrcOp);
+				
+				// We take a break from your regularly scheduled programming for better stringing
+				// maybe it could be done better
+				/** string joinedChannels = String.Empty;
+				foreach (string c in u.JoinedChannels) {
+					joinedChannels += (" " + c);
+				} **/
+				
+				// sw.WriteLine("Channels:", joinedChannels);
 			}
 		}
 	}
 	
 	public static void OnRawMessage(object sender, IrcEventArgs e)
 	{
-		System.Console.WriteLine("Received: "+e.Data.RawMessage);
+		System.Console.WriteLine("{RAW} "+e.Data.RawMessage);
 	}
 }
 }
