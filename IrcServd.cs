@@ -10,16 +10,17 @@ namespace IrcTools {
 public class IrcServd {
 	public static IrcClient irc = new IrcClient();
 	public static TcpListener tl = new TcpListener(IPAddress.Any, 4242);
-	public static IList<ChannelInfo> ChannelCache;
+	public static IList<ChannelInfo> ChannelCache = null;
 
 	public static void Main(string[]args) {
-		// Init threads & networking
-		new Thread(new ThreadStart(Server)).Start();
 		// Init IRC
 		irc.OnRawMessage += new IrcEventHandler(OnRawMessage);
 		irc.SupportNonRfc = true;
 		irc.Connect(args , 6667);
 		irc.Login("WebServ", "IRC Web Services");
+		// Init threads
+		new Thread(new ThreadStart(Server)).Start();
+		new Thread(new ThreadStart(CacheRegen)).Start();
 		irc.Listen();
 	}
 	
@@ -28,6 +29,13 @@ public class IrcServd {
 		tl.Start();
 		while (true) {
 			new Thread(new ParameterizedThreadStart(ServerHandler)).Start(tl.AcceptTcpClient());
+		}
+	}
+	
+	public static void CacheRegen() {
+		while (true) {
+			Thread.Sleep(900000); // 15 minutes sounds reasonable
+			ChannelCache = irc.GetChannelList("*");
 		}
 	}
 	
@@ -43,16 +51,19 @@ public class IrcServd {
 			// For silent commands, you should write back even if they don't listen - for telnet users
 			// rewrite into switch too
 			if (cmd[0] == "ChannelList") {
-				foreach (ChannelInfo i in irc.GetChannelList("*")) {
+				// If the cache is null, get the channels cached
+				if (ChannelCache == null) {
+					Console.WriteLine("{DBG} Generating new channel cache");
+					ChannelCache = irc.GetChannelList("*");
+				}
+				// Get channels from cache
+				foreach (ChannelInfo i in ChannelCache) {
 					sw.WriteLine(i.Channel + "\t" + i.UserCount + "\t" + i.Topic);
 				}
 			} if (cmd[0] == "Motd") {
 				foreach (string m in irc.Motd) {
 					sw.WriteLine(m);
 				}
-			} if (cmd[0] == "MotdReload") {
-				// don't use yet
-				// irc.RfcMotd();
 			} if (cmd[0] == "GetUser") {
 				// GUESS WHAT RETURNS NULLREFERENCEEXCEPTION WHEN YOU TRY TO USE THE PROPERTIES OF IT?
 				IrcUser u = irc.GetIrcUser(cmd[1]);
