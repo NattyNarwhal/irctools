@@ -23,9 +23,9 @@ private void Page_Load(Object sender, EventArgs e)
 				break;
 			
 			TableRow tr = new TableRow();
-			TableCell td_channel = new TableCell{Text = c[0]};
-			TableCell td_ucount  = new TableCell{Text = c[1]};
-			TableCell td_topic = new TableCell{Text = c[2]};
+			TableCell td_channel = new TableCell{Text = c[0]}; // Don't need to encode topic names hopefully
+			TableCell td_ucount  = new TableCell{Text = c[1]}; // lolwedon'tneedtoencodethis
+			TableCell td_topic = new TableCell{Text = HttpUtility.HtmlEncode(c[2])}; // thank you sam
 			tr.Cells.Add(td_channel);
 			tr.Cells.Add(td_ucount);
 			tr.Cells.Add(td_topic);
