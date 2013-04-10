@@ -1,10 +1,12 @@
 # IrcTools
 
-It's a lightweight daemon and a set of ASP.NET pages (that are really unpolished, and there's only one for now) that expose IRC data without being on IRC.
+It's a lightweight daemon and a set of ASP.NET controls that expose IRC data without being on IRC.
 
-Right now, it has no caching, (flooding for /list protection can break it) so I wouldn't recommend running it at until that's ready.
+## Todo
 
-Code is self-explanatory
+ * Settings
+ * Better exception handling
+ * Oper stuff (force cache reloads over the wire)
 
 ## Building and running
 
@@ -12,4 +14,11 @@ Tweak the IrcSercd.cs and ChannelList.aspx for your server.
 
 Build the IrcServd.cs with the latest SmartIrc4net (included for your convience) and run it with your server as the parameter.
 
-Run xsp in the folder.
+For the controls, embed them on your page (as shown in Sample.aspx) and run the web server, either by putting it in your site directory or for local testing, `xsp2` or `xsp2` in the working directory.
+
+### Usage
+
+Sample.aspx contains how to use the controls on your page. They include:
+
+ * Motd: embed a message of the day
+ * ChannelList: a table of channels
