@@ -24,7 +24,7 @@ private void Page_Load(Object sender, EventArgs e)
 			
 			TableRow tr = new TableRow();
 			TableCell td_username = new TableCell{Text = c[0]};
-			TableCell td_realname  = new TableCell{Text = HttpUtility.HtmlEncode(c[1]});
+			TableCell td_realname  = new TableCell{Text = HttpUtility.HtmlEncode(c[1])});
 			TableCell td_hostmask = new TableCell{Text = c[2]};
 			TableCell td_presence = new TableCell{Text = c[3]};
 			TableCell td_operator = new TableCell{Text = c[4]};
