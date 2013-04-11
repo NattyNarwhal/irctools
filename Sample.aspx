@@ -11,8 +11,8 @@
 		<h1>Motd</h1>
 		<irc:Motd Server="127.0.0.1" Port="4242" id="Motd1" runat="server" />
 		<h1>Channel list</h1>
-		<irc:ChannelList Server="127.0.0.1" Port="4242" id="List1" runat="server" />
+		<irc:ChannelList Server="127.0.0.1" Port="4242" id="CList1" runat="server" />
 		<h1>User list</h1>
-		<irc:UserList Server="127.0.0.1" Port="4242" id="List1" runat="server" />
+		<irc:UserList Server="127.0.0.1" Port="4242" id="UList1" runat="server" />
 	</body>
 </html>
