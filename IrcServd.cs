@@ -53,45 +53,51 @@ namespace IrcTools {
 				
 				string[] cmd = sr.ReadLine().Split(new char[]{' '}, 2);
 				// For silent commands, you should write back even if they don't listen - for telnet users
-				// rewrite into switch too
-				if (cmd[0] == "ChannelList") {
-					// If the cache is null, get the channels cached
-					if (ChannelCache == null) {
-						RegenChannelCache();
-					}
-					// Get channels from cache
-					foreach (ChannelInfo i in ChannelCache) {
-						sw.WriteLine(i.Channel + "\t" + i.UserCount + "\t" + i.Topic);
-					}
-				} if (cmd[0] == "Motd") {
-					foreach (string m in irc.Motd) {
-						sw.WriteLine(m);
-					}
-				} if (cmd[0] == "UserList") {
-					// Regen cache, in case it doesn't exist
-					if (UserCache == null) {
-						RegenUserCache();
-					}
-					// we output seperating information by a tab char
-					// outp is (nick + realname + hostmask + away + oper)
-					// easily parsable into tables or labels or just a postprocessing into a human readable string
-					foreach (var u in UserCache) {
-						sw.WriteLine(u.Nick + "\t" + u.Realname  + "\t" + u.Ident + "@" + u.Host + "\t" + u.IsAway.ToString() + "\t" + u.IsIrcOp.ToString());
-					}
-				} if (cmd[0] == "GetUser") {
-					// Regen cache, in case it doesn't exist
-					if (UserCache == null) {
-						RegenUserCache();
-					}
-					// on the other hand, it's a bit much if you want one
-					// user - we have a function that will cut the others out for you
-					// the function return nothing to the stream if we don't find anyone
-					foreach (var u in UserCache) {
-						// case insensitivity
-						if (u.Nick.ToLower() == cmd[1].ToLower()) {
+				switch (cmd[0]) {
+					case "ChannelList":
+						// If the cache is null, get the channels cached
+						if (ChannelCache == null) {
+							RegenChannelCache();
+						}
+						// Get channels from cache
+						foreach (ChannelInfo i in ChannelCache) {
+							sw.WriteLine(i.Channel + "\t" + i.UserCount + "\t" + i.Topic);
+						}
+						break;
+					case "Motd":
+						foreach (string m in irc.Motd) {
+							sw.WriteLine(m);
+						}
+						break;
+					case "UserList":
+						// Regen cache, in case it doesn't exist
+						if (UserCache == null) {
+							RegenUserCache();
+						}
+						// we output seperating information by a tab char
+						// outp is (nick + realname + hostmask + away + oper)
+						// easily parsable into tables or labels or just a postprocessing into a human readable string
+						foreach (var u in UserCache) {
 							sw.WriteLine(u.Nick + "\t" + u.Realname  + "\t" + u.Ident + "@" + u.Host + "\t" + u.IsAway.ToString() + "\t" + u.IsIrcOp.ToString());
 						}
-					}
+						break;
+					case "GetUser":
+						// Regen cache, in case it doesn't exist
+						if (UserCache == null) {
+							RegenUserCache();
+						}
+						// on the other hand, it's a bit much if you want one
+						// user - we have a function that will cut the others out for you
+						// the function return nothing to the stream if we don't find anyone
+						foreach (var u in UserCache) {
+							// case insensitivity
+							if (u.Nick.ToLower() == cmd[1].ToLower()) {
+								sw.WriteLine(u.Nick + "\t" + u.Realname  + "\t" + u.Ident + "@" + u.Host + "\t" + u.IsAway.ToString() + "\t" + u.IsIrcOp.ToString());
+							}
+						}
+						break;
+					default:
+						break;
 				}
 			}
 		}

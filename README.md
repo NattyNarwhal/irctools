@@ -10,11 +10,11 @@ It's a lightweight daemon and a set of ASP.NET controls that expose IRC data wit
 
 ## Building and running
 
-Tweak the IrcSercd.cs and ChannelList.aspx for your server.
+As of right now, there is nothing to configure - cache delays, username, etc. cannot be changed.
 
-Build the IrcServd.cs with the latest SmartIrc4net (included for your convience) and run it with your server as the parameter.
+Build the IrcServd.cs with the latest SmartIrc4net (included for your convience) and run it with your server as the parameter. (e.g: `mono IrcServd.exe irc.example.com`)
 
-For the controls, embed them on your page (as shown in Sample.aspx) and run the web server, either by putting it in your site directory or for local testing, `xsp2` or `xsp2` in the working directory.
+For the controls, embed them on your page (as shown in Sample.aspx) and run the web server, either by putting it in your site directory or for local testing, `xsp2` or `xsp4` in the working directory.
 
 ### Usage
 
