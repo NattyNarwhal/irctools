@@ -20,4 +20,4 @@ private void Page_Load(Object sender, EventArgs e)
 	}
 }
 </script>
-<pre><asp:Label id="Motd" runat="server" /></pre>
+<pre><asp:Literal id="Motd" runat="server" /></pre>
